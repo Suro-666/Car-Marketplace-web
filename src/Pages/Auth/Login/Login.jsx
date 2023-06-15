@@ -8,7 +8,7 @@ import Spinner from "../../../Components/Spinner/Spinner";
 import ShowPassword from "../../../Components/Show-Password-Eye/ShowPassword";
 
 const SignIn = () => {
-  const { onLogin, handleForgotPassword, loading } = controller();
+  const { onLogin, handleForgotPassword, loading, emailChecked } = controller();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);

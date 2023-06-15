@@ -7,7 +7,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Layout>
-        <Suspense fallback={<h3>Loading...</h3>}>
+        <Suspense>
           <RouterManager />
         </Suspense>
       </Layout>

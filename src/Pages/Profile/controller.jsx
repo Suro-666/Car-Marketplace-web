@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../../Store-Zustand/Auth/authStore";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../../../firebase";
@@ -14,6 +14,7 @@ import {
 const controller = () => {
   const { userData, signOutUser } = useAuthStore();
   const { currentUser, setCurrentUser } = useUserStore();
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,6 +58,7 @@ const controller = () => {
   // ../user-board/component/options
   const handleChangeEmail = async (_email, fn) => {
     try {
+      setLoading(true)
       if (userData.uid) {
         const credential = EmailAuthProvider.credential(currentUser.email, currentUser.password);
         await reauthenticateWithCredential(auth.currentUser, credential);
@@ -66,6 +68,7 @@ const controller = () => {
           email: _email,
         });
         getUserData();
+        setLoading(false)
         fn(false);
       }
     } catch (error) {
@@ -76,6 +79,7 @@ const controller = () => {
   const handleChangePassword = async (_password, fn) => {
     try {
       if (userData.uid) {
+        setLoading(true)
         const credential = EmailAuthProvider.credential(currentUser.email, currentUser.password);
         await reauthenticateWithCredential(auth.currentUser, credential);
         await updatePassword(auth.currentUser, _password);
@@ -84,6 +88,7 @@ const controller = () => {
           password: _password,
         });
         getUserData();
+        setLoading(false)
         fn(false);
       }
     } catch (error) {
@@ -91,7 +96,7 @@ const controller = () => {
     }
   };
 
-  return { currentUser, handleFormSubmit, handleChangeEmail, handleChangePassword };
+  return { currentUser, handleFormSubmit, handleChangeEmail, handleChangePassword, loading };
 };
 
 export default controller;

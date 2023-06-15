@@ -14,6 +14,7 @@ const controller = () => {
   const { setUser } = useAuthStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [emailChecked, setEmailChecked] = useState(false);
   async function onLogin(_value) {
     try {
       await signInWithEmailAndPassword(auth, _value.email, _value.password).then(({ user }) => {
@@ -21,7 +22,7 @@ const controller = () => {
           uid: user.uid,
         });
       });
-      navigate("/");
+      navigate("/profile");
     } catch (error) {
       console.error(error.message);
     }
@@ -58,7 +59,7 @@ const controller = () => {
     }
   };
 
-  return { onLogin, handleForgotPassword, loading };
+  return { onLogin, handleForgotPassword, loading, emailChecked };
 };
 
 export default controller;

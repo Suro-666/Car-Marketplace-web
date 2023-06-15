@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "./components/Button";
 import Nav from "./components/Nav";
 import controller from "./controller";
+import BurgerMenu from "./components/BurgerMenu";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const Header = () => {
           {/* BURGER MENU */}
           <div
             className={`hidden md:flex ${
-              userData !== null ? "justify-between" : "justify-center"
+              userData !== null ? "justify-between" : "justify-end"
             } items-center w-[140px]`}
           >
             <Button />
@@ -107,25 +108,7 @@ const Header = () => {
               <></>
             )}
           </div>
-          <div
-            onClick={() => alert("dadsadas")}
-            className="block: md:hidden text-white cursor-pointer"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="#FFFFFF"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-10 h-10"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          </div>
+          <BurgerMenu />
         </div>
       </div>
     </div>

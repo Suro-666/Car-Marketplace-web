@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
       navigate("/");
     } else if (pathname === "/profile" && userData === null) {
       navigate("/");
-    }
+    } 
   }, [userData, pathname]);
 
   return (

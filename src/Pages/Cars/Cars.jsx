@@ -1,12 +1,17 @@
-import React from "react";
+import CarPageHeader from "./components/CarPageHeader";
+import CarsBlock from "./components/CarsBlock";
+import FilterBlock from "./components/FilterBlock";
 
 const Cars = () => {
   return (
     <div className="w-full xl:w-[1280px] m-auto bg-white min-h-screen">
-      <div className="mx-[20px] flex flex-col ">
-        <div className="h-[400px] bg-amber-200 w-full">CARS</div>
-        <div className="h-[400px] bg-amber-300 w-full">CARS</div>
-        <div className="h-[400px] bg-amber-400 w-full">CARS</div>
+      <CarPageHeader />
+
+      <div className="w-full py-[20px] px-[20px]">
+        <div className="w-full h-full flex">
+          <FilterBlock />
+          <CarsBlock />
+        </div>
       </div>
     </div>
   );

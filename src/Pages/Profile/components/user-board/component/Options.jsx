@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import { passwordsValidationSchema, updatedEmailValidationSchema } from "./OptionsSchemas";
 import controller from "../../../controller";
 import ShowPassword from "../../../../../Components/Show-Password-Eye/ShowPassword";
+import Spinner from "../../../../../Components/Spinner/Spinner";
 
 const Options = ({ currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { name, surname, email, password } = currentUser;
-  const { handleChangeEmail, handleChangePassword } = controller();
+  const { handleChangeEmail, handleChangePassword, loading } = controller();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
@@ -38,110 +39,116 @@ const Options = ({ currentUser }) => {
         onCancel={() => setIsOpen(false)}
         footer={null}
       >
-        <pre className="py-[20px] px-[10px]">
-          <div className="min-h-[200px] flex flex-col justify-between items-start gap-[10px]">
-            <div>
-              <div className="text-[16px]">E-mail : {email}</div>
-              <div className="text-[16px]">Name : {name.toUpperCase()}</div>
-              <div className="text-[16px]">Surname : {surname.toUpperCase()}</div>
-              <div className="text-[16px]">Password : {password}</div>
-            </div>
-            <Formik
-              initialValues={{
-                updatedEmail: "",
-              }}
-              validationSchema={updatedEmailValidationSchema}
-              onSubmit={async (value, { resetForm }) => {
-                await handleChangeEmail(value.updatedEmail, setIsOpen);
-                resetForm();
-              }}
-            >
-              {({ errors }) => (
-                <Form className="w-full">
-                  <label>Change E-mail</label>
-                  <div className="mt-[5px] w-full flex">
-                    <Field
-                      placeholder="New E-mail"
-                      type="email"
-                      name="updatedEmail"
-                      className="border border-black w-2/4 py-[3px] px-[6px] outline-none "
-                    />
-                    <button
-                      disabled={Object.keys(errors).length !== 0}
-                      type="submit"
-                      className="disabled:bg-slate-300 disabled:border-slate-300 disabled:cursor-not-allowed py-[4px] px-[15px] font-bold hover:scale-[1.1] duration-300 ml-[5px] bg-amber-300"
-                    >
-                      Update
-                    </button>
-                  </div>
-                  <div className="text-red-500 text-sm ml-[2px] my-[7px] text-[16px]">
-                    <ErrorMessage name="updatedEmail" />
-                  </div>
-                </Form>
-              )}
-            </Formik>
-
-            <Formik
-              initialValues={{
-                password: "",
-                repeatPassword: "",
-              }}
-              validationSchema={passwordsValidationSchema}
-              onSubmit={async (value, { resetForm }) => {
-                if (value.password === value.repeatPassword) {
-                  await handleChangePassword(value.password, setIsOpen);
+        {loading ? (
+          <pre className="py-[20px] min-h-[200px] px-[10px] flex justify-center items-center">
+            <Spinner />
+          </pre>
+        ) : (
+          <pre className="py-[20px] px-[10px]">
+            <div className="min-h-[200px] flex flex-col justify-between items-start gap-[10px]">
+              <div>
+                <div className="text-[16px]">E-mail : {email}</div>
+                <div className="text-[16px]">Name : {name.toUpperCase()}</div>
+                <div className="text-[16px]">Surname : {surname.toUpperCase()}</div>
+                <div className="text-[16px]">Password : {password}</div>
+              </div>
+              <Formik
+                initialValues={{
+                  updatedEmail: "",
+                }}
+                validationSchema={updatedEmailValidationSchema}
+                onSubmit={async (value, { resetForm }) => {
+                  await handleChangeEmail(value.updatedEmail, setIsOpen);
                   resetForm();
-                }
-              }}
-            >
-              {({ errors }) => (
-                <Form className="w-full">
-                  <label>Change Password</label>
-                  <div className="my-[5px] w-full">
-                    <Field
-                      placeholder="New password"
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      className="border border-black w-2/3 py-[3px] px-[6px] outline-none"
-                    />
-
-                    <div className="text-red-500 text-sm ml-[2px] my-[7px] text-[16px]">
-                      <ErrorMessage name="password" />
-                    </div>
-                  </div>
-                  <div className="my-[5px] w-full">
-                    <div className="relative w-full flex flex-col">
-                      <div className="w-full mb-2">
-                        <Field
-                          placeholder="Repeat password"
-                          type={showPassword ? "text" : "password"}
-                          name="repeatPassword"
-                          className="border border-black w-2/3 py-[3px] pl-[6px] pr-[35px] outline-none"
-                        />
-                        <ShowPassword
-                          bool={showPassword}
-                          fn={setShowPassword}
-                          top={2}
-                          right={155}
-                        />
-                      </div>
+                }}
+              >
+                {({ errors }) => (
+                  <Form className="w-full">
+                    <label>Change E-mail</label>
+                    <div className="mt-[5px] w-full flex">
+                      <Field
+                        placeholder="New E-mail"
+                        type="email"
+                        name="updatedEmail"
+                        className="border border-black w-2/4 py-[3px] px-[6px] outline-none "
+                      />
                       <button
-                        type="submit"
                         disabled={Object.keys(errors).length !== 0}
-                        className="disabled:bg-slate-300 disabled:border-slate-300 disabled:cursor-not-allowed py-[4px] px-[15px] font-bold hover:scale-[1.05] duration-300 bg-amber-300"
+                        type="submit"
+                        className="disabled:bg-slate-300 disabled:border-slate-300 disabled:cursor-not-allowed py-[4px] px-[15px] font-bold hover:scale-[1.1] duration-300 ml-[5px] bg-amber-300"
                       >
                         Update
                       </button>
                     </div>
                     <div className="text-red-500 text-sm ml-[2px] my-[7px] text-[16px]">
-                      <ErrorMessage name="repeatPassword" />
+                      <ErrorMessage name="updatedEmail" />
                     </div>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </pre>
+                  </Form>
+                )}
+              </Formik>
+
+              <Formik
+                initialValues={{
+                  password: "",
+                  repeatPassword: "",
+                }}
+                validationSchema={passwordsValidationSchema}
+                onSubmit={async (value, { resetForm }) => {
+                  if (value.password === value.repeatPassword) {
+                    await handleChangePassword(value.password, setIsOpen);
+                    resetForm();
+                  }
+                }}
+              >
+                {({ errors }) => (
+                  <Form className="w-full">
+                    <label>Change Password</label>
+                    <div className="my-[5px] w-full">
+                      <Field
+                        placeholder="New password"
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        className="border border-black w-2/3 py-[3px] px-[6px] outline-none"
+                      />
+
+                      <div className="text-red-500 text-sm ml-[2px] my-[7px] text-[16px]">
+                        <ErrorMessage name="password" />
+                      </div>
+                    </div>
+                    <div className="my-[5px] w-full">
+                      <div className="relative w-full flex flex-col">
+                        <div className="w-full mb-2">
+                          <Field
+                            placeholder="Repeat password"
+                            type={showPassword ? "text" : "password"}
+                            name="repeatPassword"
+                            className="border border-black w-2/3 py-[3px] pl-[6px] pr-[35px] outline-none"
+                          />
+                          <ShowPassword
+                            bool={showPassword}
+                            fn={setShowPassword}
+                            top={2}
+                            right={155}
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          disabled={Object.keys(errors).length !== 0}
+                          className="disabled:bg-slate-300 disabled:border-slate-300 disabled:cursor-not-allowed py-[4px] px-[15px] font-bold hover:scale-[1.05] duration-300 bg-amber-300"
+                        >
+                          Update
+                        </button>
+                      </div>
+                      <div className="text-red-500 text-sm ml-[2px] my-[7px] text-[16px]">
+                        <ErrorMessage name="repeatPassword" />
+                      </div>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </div>
+          </pre>
+        )}
       </Modal>
     </div>
   );
